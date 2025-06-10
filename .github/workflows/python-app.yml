@@ -1,4 +1,4 @@
-ame: Python CI/CD Pipeline
+name: Python CI/CD Pipeline
 
 on:
   push:
