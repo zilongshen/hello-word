@@ -14,7 +14,5 @@ setup(
         "Programming Language :: Python :: 3",
         "Operating System :: OS Independent",
     ],
-    license='MIT',
-    # 此处省略其他参数，可按需补充
-    cmdclass={},  # 若有自定义命令类，可在此补充
+    license='MIT'
 )
