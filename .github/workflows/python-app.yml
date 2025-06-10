@@ -29,6 +29,7 @@ jobs:
           python -m pip install --upgrade pip
           pip install build pytest versioneer  # 安装构建和测试工具
           pip install -r requirements.txt # 安装项目依赖
+          versioneer install
 
       - name: Run tests
         run: pytest tests/  # 运行单元测试
