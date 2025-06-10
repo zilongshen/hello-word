@@ -37,7 +37,7 @@ jobs:
           PYTHONPATH: ${{ github.workspace }}/src  # 设置Python路径
 
       - name: Build source distribution
-        run: python -m build --sdist --wheel .  # 生成构建产物
+        run: python setup.py sdist bdist_wheel # 生成构建产物
 
       - name: Install twine for publishing
         run: pip install twine
