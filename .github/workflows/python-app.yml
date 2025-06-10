@@ -41,8 +41,7 @@ jobs:
         run: pip install twine
 
       - name: Upload to PyPI
-        run: twine upload --repository testpypi dist/*
+        run: twine upload --repository testpypi dist/* --verbose
         env:
-          TWINE_USERNAME: ${{ secrets.PYPI_USERNAME }}  # PyPI用户名（需在仓库Secrets中配置）
           TWINE_PASSWORD: ${{ secrets.PYPI_PASSWORD }}  # PyPI密码/API Token（需在仓库Secrets中配置）
 
