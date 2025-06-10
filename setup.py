@@ -16,6 +16,5 @@ setup(
     ],
     license='MIT',
     # 此处省略其他参数，可按需补充
-    version='',  # 版本号由versioneer生成，此处先空着
     cmdclass={},  # 若有自定义命令类，可在此补充
 )
