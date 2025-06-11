@@ -11,6 +11,18 @@ on:
 permissions:
   contents: read
 
+env:
+  REGION: cn-shanghai
+  ACK_CLUSTER_ID: c0c6fd35f298c43e190d24bac3f7eed2a
+  ACK_SERVER: ${{ secrets.ACK_CITYARK_SERVER }}
+  ACK_CA: ${{ secrets.ACK_CITYARK_CA }}
+  ACK_CLIENT_CERTIFICATE: ${{ secrets.ACK_CITYARK_CLIENT_CERTIFICATE }}
+  ACK_CLIENT_KEY: ${{ secrets.ACK_CITYARK_CLIENT_KEY }}
+  REGISTRY: ${{ vars.ACR_CITYARK_REGISTRY }}
+  NAMESPACE: cityark
+  APP_NAME: chromadb
+  IMAGE_PULL_SECRET: acr-auth
+
 jobs:
   # 构建和测试作业
   build-test-publish:
@@ -19,31 +31,53 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v4
 
-      - name: Set up Python 3.9
-        uses: actions/setup-python@v4
+#      - name: Set up Python 3.9
+#        uses: actions/setup-python@v4
+#        with:
+#          python-version: 3.9  # 指定Python版本
+#
+#      - name: Install build dependencies
+#        run: |
+#          python -m pip install --upgrade pip
+#          pip install build pytest versioneer  # 安装构建和测试工具
+#          pip install -r requirements.txt # 安装项目依赖
+#          versioneer install
+#
+#      - name: Run tests
+#        run: pytest tests/  # 运行单元测试
+#        env:
+#          PYTHONPATH: ${{ github.workspace }}/src  # 设置Python路径
+#
+#      - name: Build source distribution
+#        run: python setup.py sdist # 生成构建产物
+#
+#      - name: Install twine for publishing
+#        run: pip install twine
+#
+#      - name: Upload to PyPI
+#        run: twine upload --repository testpypi dist/* --verbose
+#        env:
+#          TWINE_PASSWORD: ${{ secrets.PYPI_PASSWORD }}  # PyPI密码/API Token（需在仓库Secrets中配置）
+
+      - name: Login to ACR
+        uses: docker/login-action@v3
         with:
-          python-version: 3.9  # 指定Python版本
+          registry: ${{ env.REGISTRY }}
+          username: ${{ secrets.ACR_CITYARK_USERNAME }}
+          password: ${{ secrets.ACR_CITYARK_PASSWORD }}
 
-      - name: Install build dependencies
-        run: |
-          python -m pip install --upgrade pip
-          pip install build pytest versioneer  # 安装构建和测试工具
-          pip install -r requirements.txt # 安装项目依赖
-          versioneer install
 
-      - name: Run tests
-        run: pytest tests/  # 运行单元测试
-        env:
-          PYTHONPATH: ${{ github.workspace }}/src  # 设置Python路径
-
-      - name: Build source distribution
-        run: python setup.py sdist # 生成构建产物
-
-      - name: Install twine for publishing
-        run: pip install twine
-
-      - name: Upload to PyPI
-        run: twine upload --repository testpypi dist/* --verbose
-        env:
-          TWINE_PASSWORD: ${{ secrets.PYPI_PASSWORD }}  # PyPI密码/API Token（需在仓库Secrets中配置）
+      - name: Set up QEMU
+        uses: docker/setup-qemu-action@v3
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v3
+      - name: Build and push Docker image
+        uses: docker/build-push-action@v5
+        with:
+          context: .
+          push: true
+          platforms: linux/amd64
+          tags: ${{ env.REGISTRY }}/${{ env.NAMESPACE }}/${{ env.APP_NAME }}:latest
+          cache-from: type=gha
+          cache-to: type=gha,mode=max
 
