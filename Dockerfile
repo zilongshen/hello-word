@@ -6,4 +6,4 @@ RUN pip install chromadb
 
 EXPOSE 8000
 
-CMD ["chroma", "run", "--path", "/chroma/data"]
+CMD ["chroma", "run", "--host", "0.0.0.0", "--path", "/chroma/data"]
