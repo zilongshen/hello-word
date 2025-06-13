@@ -12,24 +12,37 @@ permissions:
   contents: read
 
 env:
-  REGION: cn-shanghai
-  ACK_CLUSTER_ID: c0c6fd35f298c43e190d24bac3f7eed2a
   ACK_SERVER: ${{ secrets.ACK_CITYARK_SERVER }}
   ACK_CA: ${{ secrets.ACK_CITYARK_CA }}
   ACK_CLIENT_CERTIFICATE: ${{ secrets.ACK_CITYARK_CLIENT_CERTIFICATE }}
   ACK_CLIENT_KEY: ${{ secrets.ACK_CITYARK_CLIENT_KEY }}
   REGISTRY: ${{ secrets.ACR_CITYARK_REGISTRY }}
   NAMESPACE: cityark
-  APP_NAME: chromadb
+  IMAGE_NAME: chromadb
+  APP_NAME: chroma-db
   IMAGE_PULL_SECRET: acr-auth
 
 jobs:
   # 构建和测试作业
   build-test-publish:
     runs-on: ubuntu-latest
+
+    outputs:
+      image_tag: ${{ steps.set-image-tag.outputs.image_tag }}
+      short_sha: ${{ steps.set-image-tag.outputs.short_sha }}
+
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
+
+      - name: Set short SHA and image tag
+        id: set-image-tag
+        run: |
+          SHORT_SHA=$(echo ${{ github.sha }} | cut -c1-8)
+          IMAGE_TAG="${{ github.ref_name }}-$SHORT_SHA"
+          echo "image_tag=$IMAGE_TAG" >> $GITHUB_OUTPUT
+          echo "short_sha=$SHORT_SHA" >> $GITHUB_OUTPUT
+          echo "IMAGE_TAG=$IMAGE_TAG" >> $GITHUB_ENV
 
 #      - name: Set up Python 3.9
 #        uses: actions/setup-python@v4
@@ -77,7 +90,24 @@ jobs:
           context: .
           push: true
           platforms: linux/amd64
-          tags: ${{ env.REGISTRY }}/${{ env.NAMESPACE }}/${{ env.APP_NAME }}:latest
+          tags: ${{ env.REGISTRY }}/${{ env.NAMESPACE }}/${{ env.IMAGE_NAME }}:${{ env.IMAGE_TAG }}
           cache-from: type=gha
           cache-to: type=gha,mode=max
+
+      - name: Configure kubectl
+        uses: azure/setup-kubectl@v3
+        with:
+          version: 'latest'
+
+      - name: Set kubeconfig.yaml
+        run: |
+          mkdir -p ~/.kube
+          envsubst < k8s/kubeconfig.yaml > ~/.kube/config
+
+      - name: Deploy to ACK
+        run: |
+          export IMAGE_TAG=${{ steps.set-image-tag.outputs.image_tag }}
+          export SHORT_SHA=${{ steps.set-image-tag.outputs.short_sha }}
+          envsubst < k8s/template.yaml | kubectl apply -f -
+          kubectl rollout status deployment/${{ env.APP_NAME }} --namespace=${{ env.NAMESPACE }} --timeout=300s
 
