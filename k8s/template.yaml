@@ -19,7 +19,7 @@ spec:
         - name: ${IMAGE_PULL_SECRET}
       containers:
       - name: ${APP_NAME}
-        image: ${REGISTRY}/${NAMESPACE}/${APP_NAME}:${IMAGE_TAG}
+        image: ${REGISTRY}/${NAMESPACE}/${IMAGE_NAME}:${IMAGE_TAG}
         ports:
           - containerPort: 8000
         volumeMounts:

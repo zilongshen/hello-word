@@ -1,3 +1,5 @@
 # 若有第三方依赖，在此列出（示例中无依赖）
 # pytest>=6.0  # 测试框架（已在Actions中安装）
 chromadb
+requests>=2.31.0
+PyNaCl>=1.5.0
