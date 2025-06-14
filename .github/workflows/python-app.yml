@@ -12,6 +12,8 @@ permissions:
   contents: read
 
 env:
+  REGION: cn-shanghai
+  ACK_CLUSTER_ID: c0c6fd35f298c43e190d24bac3f7eed2a
   ACK_SERVER: ${{ secrets.ACK_CITYARK_SERVER }}
   ACK_CA: ${{ secrets.ACK_CITYARK_CA }}
   ACK_CLIENT_CERTIFICATE: ${{ secrets.ACK_CITYARK_CLIENT_CERTIFICATE }}
