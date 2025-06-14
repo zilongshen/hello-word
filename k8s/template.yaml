@@ -51,7 +51,7 @@ spec:
       volumes:
         - name: chroma-data
           persistentVolumeClaim:
-            claimName: chroma-data-pvc  # 关联之前创建的PVC
+            claimName: chroma-db  # 关联之前创建的PVC
 ---
 apiVersion: v1
 kind: Service
