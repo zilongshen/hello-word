@@ -1,4 +1,4 @@
-image: crpi-8vadjonh2nyqyvih.cn-shanghai.personal.cr.aliyuncs.com/cityark/cityark-cicd
+image: crpi-8vadjonh2nyqyvih.cn-shanghai.personal.cr.aliyuncs.com/cityark/hello-world
 manifest: k8s/template1.yaml
 dockerfile: ./Dockerfile
 context: .
