@@ -80,21 +80,30 @@ jobs:
           username: ${{ secrets.ACR_CITYARK_USERNAME }}
           password: ${{ secrets.ACR_CITYARK_PASSWORD }}
 
-
       - name: Set up QEMU
         uses: docker/setup-qemu-action@v3
       - name: Set up Docker Buildx
         uses: docker/setup-buildx-action@v3
-      - name: Build and push Docker image
-        uses: docker/build-push-action@v5
-        with:
-          context: .
-          push: true
-          platforms: linux/amd64
-          tags: |
-            ${{ env.REGISTRY }}/${{ env.NAMESPACE }}/${{ env.IMAGE_NAME }}:latest
-          cache-from: type=gha
-          cache-to: type=gha,mode=max
+      # - name: Build and push Docker image
+      #   uses: docker/build-push-action@v5
+      #   with:
+      #     context: .
+      #     push: true
+      #     platforms: linux/amd64
+      #     tags: |
+      #       ${{ env.REGISTRY }}/${{ env.NAMESPACE }}/${{ env.IMAGE_NAME }}:latest
+      #     cache-from: type=gha
+      #     cache-to: type=gha,mode=max
+
+      # Tekton 镜像同步
+      - name: Sync Tekton eventlistenersink image to ACR
+        run: |
+          SRC_IMAGE=ghcr.io/tektoncd/triggers/eventlistenersink-7ad1faa98cddbcb0c24990303b220bb8:v0.32.0
+          DST_IMAGE=${{ env.REGISTRY }}/${{ env.NAMESPACE }}/tektoncd-triggers-eventlistenersink:v0.32.0
+
+          docker pull $SRC_IMAGE
+          docker tag $SRC_IMAGE $DST_IMAGE
+          docker push $DST_IMAGE
 
 #      - name: Configure kubectl
 #        uses: azure/setup-kubectl@v3
