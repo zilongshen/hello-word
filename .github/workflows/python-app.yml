@@ -99,6 +99,9 @@ jobs:
       - name: Sync Tekton Triggers v0.23.1 images to ACR
         run: |
           declare -A IMAGE_MAP=(
+            ["controller"]="gcr.io/tekton-releases/github.com/tektoncd/triggers/cmd/controller:v0.23.1"
+            ["eventlistenersink"]="gcr.io/tekton-releases/github.com/tektoncd/triggers/cmd/eventlistenersink:v0.23.1"
+            ["webhook"]="gcr.io/tekton-releases/github.com/tektoncd/triggers/cmd/webhook:v0.23.1"
             ["interceptors"]="gcr.io/tekton-releases/github.com/tektoncd/triggers/cmd/interceptors:v0.23.1"
           )
           for NAME in "${!IMAGE_MAP[@]}"; do

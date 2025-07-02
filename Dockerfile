@@ -16,5 +16,6 @@ COPY . .
 # Expose port 8000
 EXPOSE 8000
 
-# Command to run the application
-CMD ["python", "app.py"]
+# # Command to run the application
+# CMD ["chroma", "run", "--host", "0.0.0.0", "--path", "/chroma/data"]
+CMD ["python", "src/hello_world/main.py"]

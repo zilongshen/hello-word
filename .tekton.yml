@@ -1,0 +1,7 @@
+image: crpi-8vadjonh2nyqyvih.cn-shanghai.personal.cr.aliyuncs.com/cityark/cityark-cicd
+manifest: k8s/template1.yaml
+dockerfile: ./Dockerfile
+context: .
+env: dev
+allowed_branches:
+  - dev

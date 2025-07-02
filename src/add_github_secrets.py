@@ -65,8 +65,14 @@ def read_secrets_file(file_path: str) -> dict:
 def main():
     # Repository information
     owner = "cityark"
-    repo = "cityark-test-platform-service"
-    
+    # repo = "cityark-test-platform-service"
+    # repo = "cityark-backend"
+    # repo = "knowledge-platform-ui"
+    # repo = "cityark-proxy"
+    # repo = "chroma-db"
+    # repo = "cityark-mysql"
+    # repo = "cityark-mongo"
+    repo = "cityark-cicd"
     # Get GitHub token
     token = getpass("Enter your GitHub Personal Access Token: ")
     
