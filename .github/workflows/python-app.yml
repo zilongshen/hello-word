@@ -111,16 +111,15 @@ jobs:
 #            docker push $DST_IMAGE
 #          done
 
-      - name: Sync Tekton Pipelines core images to ACR
+      - name: Sync Tekton Task images to ACR
         run: |
           declare -A IMAGE_MAP=(
-            ["nop"]="ghcr.io/tektoncd/pipeline/nop-8eac7c133edad5df719dc37b36b62482:v1.1.0@sha256:52f63949cf2e3934dc49481c237be075312d9aee07be155477d2fccddb0c61b6"
-            ["sidecarlogresults"]="ghcr.io/tektoncd/pipeline/sidecarlogresults-7501c6a20d741631510a448b48ab098f:v1.1.0@sha256:ded822917616eea7365e93b783699297b0f6f85e5588a8cba53e0e9c0eb47080"
-            ["workingdirinit"]="ghcr.io/tektoncd/pipeline/workingdirinit-0c558922ec6a1b739e550e349f2d5fc1:v1.1.0@sha256:ed8668edf1dfdc8d3c2875da7b5eab315ba8d9008309a33159f736eb97c71841"
+            ["kaniko-executor"]="gcr.io/kaniko-project/executor:latest"
+            ["kubectl"]="bitnami/kubectl:latest"
           )
           for NAME in "${!IMAGE_MAP[@]}"; do
             SRC_IMAGE="${IMAGE_MAP[$NAME]}"
-            DST_IMAGE="${{ env.REGISTRY }}/${{ env.NAMESPACE }}/tektoncd-${NAME}:v1.1.0"
+            DST_IMAGE="${{ env.REGISTRY }}/${{ env.NAMESPACE }}/${NAME}:latest"
             echo "拉取 $SRC_IMAGE"
             docker pull $SRC_IMAGE
             echo "推送到 $DST_IMAGE"
