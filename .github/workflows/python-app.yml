@@ -111,15 +111,16 @@ jobs:
 #            docker push $DST_IMAGE
 #          done
 
-      - name: Sync Tekton git-init image to ACR
-        run: |
-          SRC_IMAGE="gcr.io/tekton-releases/github.com/tektoncd/pipeline/cmd/git-init:v0.40.2"
-          DST_IMAGE="${{ env.REGISTRY }}/${{ env.NAMESPACE }}/tektoncd-pipeline-git-init:v0.40.2"
-          echo "拉取 $SRC_IMAGE"
-          docker pull $SRC_IMAGE
-          echo "推送到 $DST_IMAGE"
-          docker tag $SRC_IMAGE $DST_IMAGE
-          docker push $DST_IMAGE
+      - name: Sync Tekton Entrypoint image to ACR
+        run: |          
+          # 同步 Tekton Entrypoint 镜像
+          ENTRYPOINT_SRC="ghcr.io/tektoncd/pipeline/entrypoint-bff0a22da108bc2f16c818c97641a296:v1.1.0@sha256:6e7031049f641583d651f3aac0ed58fe682076d05385d0962536d168bac993eb"
+          ENTRYPOINT_DST="${{ env.REGISTRY }}/${{ env.NAMESPACE }}/tektoncd-entrypoint:v1.1.0"
+          echo "拉取 $ENTRYPOINT_SRC"
+          docker pull $ENTRYPOINT_SRC
+          echo "推送到 $ENTRYPOINT_DST"
+          docker tag $ENTRYPOINT_SRC $ENTRYPOINT_DST
+          docker push $ENTRYPOINT_DST
 
 #      - name: Configure kubectl
 #        uses: azure/setup-kubectl@v3
