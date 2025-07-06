@@ -111,21 +111,15 @@ jobs:
 #            docker push $DST_IMAGE
 #          done
 
-      - name: Sync Tekton Task images to ACR
+      - name: Sync python:3.12-slim to ACR
         run: |
-          declare -A IMAGE_MAP=(
-            ["kaniko-executor"]="gcr.io/kaniko-project/executor:latest"
-            ["kubectl"]="bitnami/kubectl:latest"
-          )
-          for NAME in "${!IMAGE_MAP[@]}"; do
-            SRC_IMAGE="${IMAGE_MAP[$NAME]}"
-            DST_IMAGE="${{ env.REGISTRY }}/${{ env.NAMESPACE }}/${NAME}:latest"
-            echo "拉取 $SRC_IMAGE"
-            docker pull $SRC_IMAGE
-            echo "推送到 $DST_IMAGE"
-            docker tag $SRC_IMAGE $DST_IMAGE
-            docker push $DST_IMAGE
-          done
+          SRC_IMAGE=python:3.12-slim
+          DST_IMAGE=${{ env.REGISTRY }}/${{ env.NAMESPACE }}/python:3.12-slim
+          echo "拉取 $SRC_IMAGE"
+          docker pull $SRC_IMAGE
+          echo "推送到 $DST_IMAGE"
+          docker tag $SRC_IMAGE $DST_IMAGE
+          docker push $DST_IMAGE
 
 #      - name: Configure kubectl
 #        uses: azure/setup-kubectl@v3
