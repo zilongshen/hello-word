@@ -1,5 +1,5 @@
 # Use Python 3.10 slim as the base image
-FROM python:3.10-slim
+FROM  crpi-8vadjonh2nyqyvih.cn-shanghai.personal.cr.aliyuncs.com/cityark/python:3.12-slim
 
 # Set working directory
 WORKDIR /app
