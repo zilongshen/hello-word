@@ -1,15 +1,100 @@
-[build-system]
-requires = ["setuptools>=61.0", "build", "versioneer"]
-build-backend = "setuptools.build_meta"
-
 [project]
-name = "hello-world-pythonbill01"
-authors = [{name = "zilongshen", email = "luzipeng01@sina.com"}]
+name = "hello-word"
+version = "0.1.0"
 description = "A simple Hello World Python application."
-requires-python = ">=3.9"
-classifiers = [
-    "Programming Language :: Python :: 3",
-    "Operating System :: OS Independent",
+authors = [
+    {name = "zilongshen",email = "luzipeng01@sina.com"}
 ]
-license = "MIT"
-license-files = ["LICEN[CS]E*"]
+license = {text = "MIT"}
+readme = "README.md"
+requires-python = ">=3.9"
+dependencies = [
+    "chromadb (>=1.0.15,<2.0.0)",
+    "requests (>=2.32.4,<3.0.0)",
+    "pynacl (>=1.5.0,<2.0.0)"
+]
+
+
+[build-system]
+requires = ["poetry-core>=2.0.0,<3.0.0"]
+build-backend = "poetry.core.masonry.api"
+
+[tool.poetry]
+packages = [
+    { include = "hello_world", from = "src" }
+]
+
+[[tool.poetry.source]]
+name = "china"
+url = "https://mirrors.aliyun.com/pypi/simple/"
+priority = "primary"
+
+[[tool.poetry.source]]
+name = "pipy"
+url = "https://pypi.org/simple/"
+priority = "supplemental"
+
+
+[tool.poetry.group.dev.dependencies]
+ruff = "^0.12.2"
+
+[tool.black]
+line-length = 120
+target-version = ['py312']
+preview = true
+
+[tool.mypy]
+files = ["src"]
+disallow_untyped_defs = true
+disallow_any_unimported = true
+no_implicit_optional = true
+check_untyped_defs = true
+warn_return_any = true
+warn_unused_ignores = true
+show_error_codes = true
+
+[tool.ruff]
+target-version = "py312"
+line-length = 120
+fix = true
+
+[tool.ruff.lint]
+select = [
+    # flake8-2020
+    "YTT",
+    # flake8-bandit
+    "S",
+    # flake8-bugbear
+    "B",
+    # flake8-builtins
+    "A",
+    # flake8-comprehensions
+    "C4",
+    # flake8-debugger
+    "T10",
+    # flake8-simplify
+    "SIM",
+    # isort
+    "I",
+    # mccabe
+    "C90",
+    # pycodestyle
+    "E", "W",
+    # pyflakes
+    "F",
+    # pygrep-hooks
+    "PGH",
+    # pyupgrade
+    "UP",
+    # ruff
+    "RUF",
+    # tryceratops
+    "TRY",
+]
+ignore = [
+    # LineTooLong
+    "E501",
+    # DoNotAssignLambda
+    "E731",
+]
+per-file-ignores = {"tests/*" = ["S101"]}

@@ -1,6 +1,7 @@
 import mysql.connector
 from mysql.connector import Error
 
+
 def list_tables():
     try:
         connection = mysql.connector.connect(

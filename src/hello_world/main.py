@@ -1,4 +1,4 @@
-# 主程序：输出Hello World
+# 主程序: 输出Hello World
 def greet():
   return "Hello, World!"
 
