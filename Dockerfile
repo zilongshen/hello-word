@@ -7,8 +7,7 @@ RUN mkdir -p ~/.pip \
     && echo 'index-url = https://mirrors.aliyun.com/pypi/simple/' >> ~/.pip/pip.conf
 
 # 安装 poetry
-RUN pip install poetry \
-  && poetry self update
+RUN pip install poetry==2.1.3
 
 # 复制 poetry 配置文件
 COPY pyproject.toml poetry.lock* ./
