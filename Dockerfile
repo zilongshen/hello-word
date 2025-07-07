@@ -9,21 +9,22 @@ RUN mkdir -p ~/.pip \
 # 安装 poetry
 RUN pip install poetry==2.1.3
 
+WORKDIR /app
+
+# 复制项目全部代码
+COPY . .
 # 复制 poetry 配置文件
-COPY pyproject.toml poetry.lock* ./
+# COPY pyproject.toml poetry.lock* ./
 
 # 安装依赖（不创建虚拟环境，且不安装项目本身）
 RUN poetry config virtualenvs.create false \
     && poetry install --no-root
-
-# 复制项目全部代码
-COPY . .
-
-WORKDIR /app
 
 # Expose port 8000
 EXPOSE 8000
 
 # # Command to run the application
 # CMD ["chroma", "run", "--host", "0.0.0.0", "--path", "/chroma/data"]
-CMD ["python", "src/hello_world/main.py"]
+# CMD ["python", "src/hello_world/main.py"]
+# use poetry to run the application
+CMD ["poetry", "run", "python", "src/hello_world/main.py"]
