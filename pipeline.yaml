@@ -1,0 +1,17 @@
+apiVersion: tekton.dev/v1beta1
+kind: Pipeline
+metadata:
+  name: my-app-ci-cd
+spec:
+  tasks:
+    - name: fetch-source
+      taskRef:
+        name: git-clone
+    - name: build-push
+      runAfter: [fetch-source]
+      taskRef:
+        name: build-push-acr
+    - name: deploy
+      runAfter: [build-push]
+      taskRef:
+        name: k8s-deploy

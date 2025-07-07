@@ -12,77 +12,20 @@ spec:
     metadata:
       labels:
         app: ${APP_NAME}
-        git-branch: ${BRANCH_NAME}
-        git-commit: ${SHORT_SHA}
+#        git-branch: ${BRANCH_NAME}
+#        git-commit: ${SHORT_SHA}
     spec:
       imagePullSecrets:
-        - name: ${IMAGE_PULL_SECRET}
+        - name: acr-auth
       containers:
       - name: ${APP_NAME}
-        image: ${REGISTRY}/${NAMESPACE}/${IMAGE_NAME}:${IMAGE_TAG}
+        image: crpi-8vadjonh2nyqyvih.cn-shanghai.personal.cr.aliyuncs.com/${NAMESPACE}/${APP_NAME}:${IMAGE_TAG}
         ports:
           - containerPort: 8000
-        volumeMounts:
-          - name: chroma-data
-            mountPath: /chroma/data # 数据存储路径
-        livenessProbe:
-          httpGet:
-            path: /api/v2/healthcheck
-            port: 8000
-          initialDelaySeconds: 30
-          periodSeconds: 10
-          timeoutSeconds: 5
-          failureThreshold: 10
-        readinessProbe:
-          httpGet:
-            path: /api/v2/healthcheck
-            port: 8000
-          initialDelaySeconds: 30
-          periodSeconds: 10
-          timeoutSeconds: 5
-          failureThreshold: 10
         resources:
           requests:
-            cpu: "1"        # 申请1核CPU
-            memory: "4Gi"   # 申请4GB内存
+            cpu: "100m"        # 申请1核CPU
+            memory: "250Mi"   # 申请4GB内存
           limits:
-            cpu: "4"        # 最大4核CPU
-            memory: "16Gi"  # 最大16GB内存
-      volumes:
-        - name: chroma-data
-          persistentVolumeClaim:
-            claimName: chroma-db  # 关联之前创建的PVC
----
-apiVersion: v1
-kind: Service
-metadata:
-  name: ${APP_NAME}
-  namespace: ${NAMESPACE}
-spec:
-  selector:
-    app: ${APP_NAME}
-  ports:
-    - port: 80
-      targetPort: 8000
-  type: ClusterIP
----
-apiVersion: networking.k8s.io/v1
-kind: Ingress
-metadata:
-  labels:
-    ingress-controller: alb
-  name: ${APP_NAME}
-  namespace: ${NAMESPACE}
-spec:
-  ingressClassName: alb
-  rules:
-    - host: ${APP_NAME}.${NAMESPACE}.cn
-      http:
-        paths:
-          - backend:
-              service:
-                name: ${APP_NAME}
-                port:
-                  number: 80
-            path: /
-            pathType: Prefix
+            cpu: "500m"        # 最大4核CPU
+            memory: "1Gi"  # 最大16GB内存
