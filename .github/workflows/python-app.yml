@@ -111,19 +111,10 @@ jobs:
 #            docker push $DST_IMAGE
 #          done
 
-      - name: Sync mongo:6.0 to ACR
+      - name: Sync postgres:17 to ACR
         run: |
-          SRC_IMAGE=mongo:6.0
-          DST_IMAGE=${{ env.REGISTRY }}/${{ env.NAMESPACE }}/mongo:6.0
-          echo "拉取 $SRC_IMAGE"
-          docker pull $SRC_IMAGE
-          echo "推送到 $DST_IMAGE"
-          docker tag $SRC_IMAGE $DST_IMAGE
-          docker push $DST_IMAGE
-      - name: Sync mysql/mysql-server:8.0 to ACR
-        run: |
-          SRC_IMAGE=mysql/mysql-server:8.0
-          DST_IMAGE=${{ env.REGISTRY }}/${{ env.NAMESPACE }}/mysql-server:8.0
+          SRC_IMAGE=postgres:17
+          DST_IMAGE=${{ env.REGISTRY }}/${{ env.NAMESPACE }}/postgres:17
           echo "拉取 $SRC_IMAGE"
           docker pull $SRC_IMAGE
           echo "推送到 $DST_IMAGE"
