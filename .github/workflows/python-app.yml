@@ -111,10 +111,10 @@ jobs:
 #            docker push $DST_IMAGE
 #          done
 
-      - name: Sync clickhouse/clickhouse-server:23.8 to ACR
+      - name: Sync postgres:15 to ACR
         run: |
-          SRC_IMAGE=clickhouse/clickhouse-server:23.8
-          DST_IMAGE=${{ env.REGISTRY }}/${{ env.NAMESPACE }}/clickhouse-server:23.8.1 
+          SRC_IMAGE=postgres:15
+          DST_IMAGE=${{ env.REGISTRY }}/${{ env.NAMESPACE }}/postgres:15
           echo "拉取 $SRC_IMAGE"
           docker pull $SRC_IMAGE
           echo "推送到 $DST_IMAGE"
